@@ -8,6 +8,8 @@ import com.exo1.exo1.repository.TaskRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -18,12 +20,13 @@ public class ProjetService {
     private ProjetMapper projetMapper;
     private TaskRepository taskRepository;
 
-    public List<ProjetDto> findAll() {
-        return projetMapper.toDtos(projetRepository.findAll());
+    public Page<ProjetDto> findAll(Pageable pageable) {
+        Page<Projet> projets = projetRepository.findAllWithUsersAndTasks(pageable);
+        return projets.map(projetMapper::toDto);
     }
 
     public ProjetDto findById(long id) {
-        return projetMapper.toDto(projetRepository.findById(id).orElse(null));
+        return projetMapper.toDto(projetRepository.findByIdWithUsersAndTasks(id).orElse(null));
     }
 
     public ProjetDto save(ProjetDto projetDto) {

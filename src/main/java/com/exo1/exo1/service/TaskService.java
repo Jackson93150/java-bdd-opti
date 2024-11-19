@@ -17,11 +17,11 @@ public class TaskService {
     private TaskMapper taskMapper;
 
     public List<TaskDto> findAll() {
-        return taskMapper.toDtos(taskRepository.findAll());
+        return taskMapper.toDtos(taskRepository.findAllWithProjetAndUser());
     }
 
     public TaskDto findById(long id) {
-        return taskMapper.toDto(taskRepository.findById(id).orElse(null));
+        return taskMapper.toDto(taskRepository.findByIdWithProjetAndUser(id).orElse(null));
     }
 
     public TaskDto save(TaskDto taskDto) {
